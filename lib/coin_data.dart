@@ -1,3 +1,8 @@
+import 'package:bitcoin_ticker/network_service.dart';
+
+import 'constants.dart';
+import 'main.dart';
+
 const List<String> currenciesList = [
   'AUD',
   'BRL',
@@ -28,4 +33,18 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
-class CoinData {}
+class CoinData {
+  String coinName;
+
+  CoinData({this.coinName});
+
+  Future<double> getCoinData(String convertedCoin) async {
+    var url = '$kCoinApiMainUrl/$coinName/$convertedCoin?apiKey=$kCoinApiKey';
+    print(url);
+    NetworkHandler networkHandler = NetworkHandler(url: url);
+    var coinData = await networkHandler.getMarketData();
+    double rate = coinData['rate'];
+    print('$convertedCoin: $rate');
+    return rate;
+  }
+}
